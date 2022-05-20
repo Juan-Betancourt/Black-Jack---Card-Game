@@ -34,6 +34,19 @@
 #Hint 4: Create a deal_card() function that uses the List below to *return* a random card.
 #11 is the Ace.
 #cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+#Hint 5: Deal the user and computer 2 cards each using deal_card() and append().
+#Hint 6: Create a function called calculate_score() that takes a List of cards as input 
+#and returns the score. 
+#Look up the sum() function to help you do this.
+
+#Hint 7: Inside calculate_score() check for a blackjack (a hand with only 2 cards: ace + 10) and return 0 instead of the actual score. 0 will represent a blackjack in our game.
+
+#Hint 8: Inside calculate_score() check for an 11 (ace). If the score is already over 21, remove the 11 and replace it with a 1. You might need to look up append() and remove().
+
+#Hint 9: Call calculate_score(). If the computer or the user has a blackjack (0) or if the user's score is over 21, then the game ends.
+
+#Hint 10: If the game has not ended, ask the user if they want to draw another card. If yes, then use the deal_card() function to add another card to the user_cards List. If no, then the game has ended.
+
 import random
 
 
@@ -43,53 +56,47 @@ def deal_card():
     card = random.choice(cards)
     return card
 
-#Hint 5: Deal the user and computer 2 cards each using deal_card() and append().
+def calculate_score(cards):
+  """Returns the outcome of the calulated score"""
+  if sum(cards) == 21 and len(cards) == 2:
+    return 0
+  if 11 in cards and sum(cards) > 21:
+    cards.remove(11)
+    cards.append(1)
+  return sum(cards)
 user_cards = []
 computer_cards = []
+is_game_over = False
 
 for _ in range(2):
     user_cards.append(deal_card())
     computer_cards.append(deal_card())
-    
-
-
-#Hint 6: Create a function called calculate_score() that takes a List of cards as input 
-#and returns the score. 
-#Look up the sum() function to help you do this.
-
-
-def calculate_score(num1, num2):
-    print(user_cards)
-    total_user = sum(num1)
-    if total_user > 21:
-      user_cards.remove(11) 
-      user_cards.append(1)
-      total_user = sum(num1)
-    elif total_user == 21:
-      return "BlackJack"
-      print("BlackJack, you win")
-    print(total_user)
   
-    print("\n")
+while not is_game_over:    
+  user_score = calculate_score(user_cards)
+  computer_score = calculate_score(computer_cards)
+  print(f" \nYour cards: {user_cards}, current score: {user_score}")
+  print(f" \nComputer's first card: {computer_cards[0]}")
+  if user_score == 0 or computer_score == 0 or user_score > 21:
+    is_game_over = True
+    print("BlackJack, you win!")
+  
+    second_card = input("\nWould you like another card? Type 'y' for yes or 'n' for no. ")
+    if second_card == "y":
+      user_cards.append(deal_card())
+      user_score = calculate_score(user_cards)
+      print(f" \nYour cards: {user_cards}, current score: {user_score}")
+    else:
+      print("Game ends")
+      continue_dealing = False
 
-    print(computer_cards)
-    total_computer = sum(num2)
-    if total_user > 21:
-      computer_cards.remove(11) 
-      computer_cards.append(1)
-    elif total_computer == 21:
-      return "BlackJack"
-      print("BlackJack, the computer wins")
-    print(total_computer)
 
-calculate_score(num1 = user_cards, num2 = computer_cards)
-#Hint 7: Inside calculate_score() check for a blackjack (a hand with only 2 cards: ace + 10) and return 0 instead of the actual score. 0 will represent a blackjack in our game.
 
-#Hint 8: Inside calculate_score() check for an 11 (ace). If the score is already over 21, remove the 11 and replace it with a 1. You might need to look up append() and remove().
 
-#Hint 9: Call calculate_score(). If the computer or the user has a blackjack (0) or if the user's score is over 21, then the game ends.
 
-#Hint 10: If the game has not ended, ask the user if they want to draw another card. If yes, then use the deal_card() function to add another card to the user_cards List. If no, then the game has ended.
+
+
+
 
 #Hint 11: The score will need to be rechecked with every new card drawn and the checks in Hint 9 need to be repeated until the game ends.
 
